@@ -1,0 +1,12 @@
+GET http://localhost:3306/users
+Content-Type: application/json
+
+###
+POST http://localhost:3306/users
+Content-Type: application/json
+
+{
+    "fullName": "sdsd",
+    "email": "dsassaSd",
+    "password": "dsdsad"
+}
