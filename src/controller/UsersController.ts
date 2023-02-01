@@ -1,6 +1,7 @@
 import { Request, Response } from "express"
 import UsersBusiness from "../business/UsersBusiness"
-import { UserSignUpInputDTO } from "../model/UsersDTO"
+import User from "../model/User"
+import { UserIdDTO, UserSignUpInputDTO } from "../model/UsersDTO"
 
 const usersBusiness = new UsersBusiness()
 
@@ -26,6 +27,20 @@ class UsersController {
             await usersBusiness.signup(input)
 
             res.status(201).send("User created.")
+        }catch(err: any){
+            res.status(err.statusCode || 400).send(err.message || err.sqlMessage)
+        }
+    }
+
+    getUser = async (req: Request, res: Response): Promise<void> => {
+        try{
+            const input: UserIdDTO = {
+                id: req.params.string
+            }
+
+            const user = await usersBusiness.getUser(input)
+
+            res.status(200).send(user)
         }catch(err: any){
             res.status(err.statusCode || 400).send(err.message || err.sqlMessage)
         }

@@ -3,3 +3,7 @@ export interface UserSignUpInputDTO {
     email: string, 
     password: string
 }
+
+export interface UserIdDTO {
+    id: string
+}

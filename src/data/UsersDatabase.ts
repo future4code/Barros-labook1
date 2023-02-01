@@ -1,6 +1,6 @@
 import User from "../model/User"
+import { UserIdDTO } from "../model/UsersDTO"
 import BaseDatabase from "./BaseDatabase"
-import { CustomError } from "../error/CustomError"
 
 class UsersDatabase extends BaseDatabase {
     TABLE_NAME = "labook_users"
@@ -11,6 +11,10 @@ class UsersDatabase extends BaseDatabase {
 
     insertUser = async (user: User): Promise<void> => {
         await UsersDatabase.connection(this.TABLE_NAME).insert(user)
+    }
+
+    getUser = async (input: UserIdDTO): Promise<User[]> => { 
+        return await UsersDatabase.connection(this.TABLE_NAME).select("*").where("id", input.id)
     }
 }
 

@@ -2,9 +2,11 @@ import UsersDatabase from "../data/UsersDatabase"
 import { CustomError } from "../error/CustomError"
 import MissingEmail from "../error/UsersErrors/MissingEmail"
 import MissingFullName from "../error/UsersErrors/MissingFullName"
+import MissingId from "../error/UsersErrors/MissingId"
 import MissingPassword from "../error/UsersErrors/MissingPassword"
+import UserNotExisting from "../error/UsersErrors/UserNotExisting"
 import User from "../model/User"
-import { UserSignUpInputDTO } from "../model/UsersDTO"
+import { UserIdDTO, UserSignUpInputDTO } from "../model/UsersDTO"
 import idGenerator from "../services/idGenerator"
 
 const usersDatabase = new UsersDatabase()
@@ -40,6 +42,25 @@ class UsersBusiness {
             )
 
             await usersDatabase.insertUser(newUser)
+        }catch(err: any){
+            throw new CustomError(err.statusCode, err.message)  
+        }
+    }
+
+    getUser = async (input: UserIdDTO) => {
+        try{
+            if(input.id.toString() === ":id"){
+                throw new MissingId()
+            }
+
+            const allUsers = await usersDatabase.getAllUsers()
+            const userExisting = allUsers.filter(user => user.id.toString() === input.id.toString())
+
+            if(userExisting.length < 1){
+                throw new UserNotExisting()
+            }
+
+            return await usersDatabase.getUser(input)
         }catch(err: any){
             throw new CustomError(err.statusCode, err.message)  
         }
