@@ -1,3 +1,5 @@
+import Post from "./Post";
+
 class User {
     constructor(
         private id: string,

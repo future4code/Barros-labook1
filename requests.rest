@@ -1,8 +1,10 @@
+// Users endpoints
+###
 GET http://localhost:3306/users
 Content-Type: application/json
 
 ###
-GET http://localhost:3306/users/user/1a28db19-4957-4945-92ce-f66a943b5df2
+GET http://localhost:3306/users/user/1e7a836e-8e90-48e5-98b1-3d2a50c752cf
 Content-Type: application/json
 
 ###
@@ -10,7 +12,41 @@ POST http://localhost:3306/users
 Content-Type: application/json
 
 {
-    "fullName": "SDSAD",
-    "email": "GJFKLJGDKFJGKL@",
-    "password": "212123123"
+    "fullName": "Giovana Inez Vieira",
+    "email": "gioivieira@gmail.com",
+    "password": "12345678"
 }
+
+// Posts endpoints
+###
+GET http://localhost:3306/posts
+Content-Type: application/json
+
+###
+GET http://localhost:3306/posts/post/:id
+Content-Type: application/json
+
+###
+POST http://localhost:3306/posts
+Content-Type: application/json
+
+{
+    "photo": "https://i.pinimg.com/originals/e4/34/2a/e4342a4e0e968344b75cf50cf1936c09.jpg",
+    "description": "Wolf.",
+    "type": "NORMAL",
+    "authorId": "226b430d-6ee8-4697-ac89-ba7f3498812b"
+}
+
+// Posts endpoints
+###
+GET http://localhost:3306/friendships
+Content-Type: application/json
+
+###
+POST http://localhost:3306/friendships/1e7a836e-8e90-48e5-98b1-3d2a50c752cf
+Content-Type: application/json
+
+{
+    "friendId": "1e7a836e-8e90-48e5-98b1-3d2a50c752cf"
+}
+

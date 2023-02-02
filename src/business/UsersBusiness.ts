@@ -1,22 +1,43 @@
 import UsersDatabase from "../data/UsersDatabase"
 import { CustomError } from "../error/CustomError"
+import EmptyListError from "../error/EmptyListError"
 import MissingEmail from "../error/UsersErrors/MissingEmail"
 import MissingFullName from "../error/UsersErrors/MissingFullName"
-import MissingId from "../error/UsersErrors/MissingId"
 import MissingPassword from "../error/UsersErrors/MissingPassword"
 import UserNotExisting from "../error/UsersErrors/UserNotExisting"
 import User from "../model/User"
 import { UserIdDTO, UserSignUpInputDTO } from "../model/UsersDTO"
 import idGenerator from "../services/idGenerator"
+import MissingUserId from "../error/UsersErrors/MissingUserId"
+import PostsDatabase from "../data/PostsDatabase"
 
 const usersDatabase = new UsersDatabase()
 const id = new idGenerator()
+let allUsers: any[] = []
+let userObject: any
 
 class UsersBusiness {
+
     getAllUsers = async (): Promise<User[]> => {
         try{
-            return await usersDatabase.getAllUsers()
+            const users = await usersDatabase.getAllUsers()
 
+            if(users.length < 1){
+                throw new EmptyListError()
+            }
+
+            for(let user of users){
+                const posts = await PostsDatabase.connection("labook_posts").select("*").whereLike("author_id", user.id)
+
+                let userWithPosts = {
+                    user, 
+                    posts
+                }
+
+                allUsers.push(userWithPosts)
+            }
+
+            return await usersDatabase.getAllUsers()
         }catch(err: any){
             throw new CustomError(err.statusCode, err.message)            
         }
@@ -47,10 +68,10 @@ class UsersBusiness {
         }
     }
 
-    getUser = async (input: UserIdDTO) => {
+    getUser = async (input: UserIdDTO): Promise<User[]> => {
         try{
             if(input.id === ":id"){
-                throw new MissingId()
+                throw new MissingUserId()
             }
 
             const allUsers = await usersDatabase.getAllUsers()
@@ -58,9 +79,21 @@ class UsersBusiness {
 
             if(userExisting.length < 1){
                 throw new UserNotExisting()
-            }
+            }            
 
-            return await usersDatabase.getUser(input)
+            const user = await usersDatabase.getUser(input)
+            
+            for(let userItem of user){
+                const posts = await PostsDatabase.connection("labook_posts").select("*").whereLike("author_id", userItem.id)
+
+                userObject = {
+                    user, 
+                    posts
+                }
+            }
+            
+            return userObject
+
         }catch(err: any){
             throw new CustomError(err.statusCode, err.message)  
         }

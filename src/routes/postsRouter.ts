@@ -1,6 +1,12 @@
 import express from 'express'
-import UsersController from '../controller/UsersController'
+import PostsController from '../controller/PostsController'
 
 export const postsRouter = express.Router()
 
-const usersController = new UsersController()
+const postsController = new PostsController()
+
+postsRouter.get("/", postsController.getAllPosts)
+
+postsRouter.get("/post/:id", postsController.getPost)
+
+postsRouter.post("/", postsController.createPost)

@@ -1,0 +1,15 @@
+enum PostType {
+    NORMAL= "normal",
+    EVENT= "event"    
+}
+
+export interface PostCreateInputDTO {
+    photo: string,
+    description: string,
+    type: PostType,
+    authorId: string
+}
+
+export interface PostIdDTO {
+    id: string
+}

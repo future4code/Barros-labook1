@@ -5,15 +5,15 @@ import BaseDatabase from "./BaseDatabase"
 class UsersDatabase extends BaseDatabase {
     TABLE_NAME = "labook_users"
 
-    getAllUsers = async (): Promise<User[]> => {
+    getAllUsers = async () => {
         return await UsersDatabase.connection(this.TABLE_NAME).select("*")
     }
 
-    insertUser = async (user: User): Promise<void> => {
+    insertUser = async (user: User) => {
         await UsersDatabase.connection(this.TABLE_NAME).insert(user)
     }
 
-    getUser = async (input: UserIdDTO): Promise<User[]> => { 
+    getUser = async (input: UserIdDTO) => { 
         return await UsersDatabase.connection(this.TABLE_NAME).select("*").where("id", input.id)
     }
 }

@@ -1,5 +1,4 @@
 import express from 'express'
-import app from '../app'
 import UsersController from '../controller/UsersController'
 
 export const usersRouter = express.Router()
@@ -11,3 +10,4 @@ usersRouter.get("/", usersController.getAllUsers)
 usersRouter.get("/user/:id", usersController.getUser)
 
 usersRouter.post("/", usersController.signup)
+

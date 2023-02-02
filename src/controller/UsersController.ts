@@ -1,6 +1,5 @@
 import { Request, Response } from "express"
 import UsersBusiness from "../business/UsersBusiness"
-import User from "../model/User"
 import { UserIdDTO, UserSignUpInputDTO } from "../model/UsersDTO"
 
 const usersBusiness = new UsersBusiness()
