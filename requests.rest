@@ -2,7 +2,7 @@ GET http://localhost:3306/users
 Content-Type: application/json
 
 ###
-GET http://localhost:3306/users/user/:id
+GET http://localhost:3306/users/user/1a28db19-4957-4945-92ce-f66a943b5df2
 Content-Type: application/json
 
 ###

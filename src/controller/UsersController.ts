@@ -35,7 +35,7 @@ class UsersController {
     getUser = async (req: Request, res: Response): Promise<void> => {
         try{
             const input: UserIdDTO = {
-                id: req.params.string
+                id: req.params.id
             }
 
             const user = await usersBusiness.getUser(input)

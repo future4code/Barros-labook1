@@ -49,12 +49,12 @@ class UsersBusiness {
 
     getUser = async (input: UserIdDTO) => {
         try{
-            if(input.id.toString() === ":id"){
+            if(input.id === ":id"){
                 throw new MissingId()
             }
 
             const allUsers = await usersDatabase.getAllUsers()
-            const userExisting = allUsers.filter(user => user.id.toString() === input.id.toString())
+            const userExisting = allUsers.filter(user => user.id === input.id)
 
             if(userExisting.length < 1){
                 throw new UserNotExisting()
