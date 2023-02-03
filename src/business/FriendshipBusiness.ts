@@ -17,13 +17,13 @@ const id = new idGenerator()
 class FriendshipBusiness {
     getAllFriendships = async (): Promise<Friendship[]> => {
         try{
-            const friendships = await friendshipDatabase.getAllUsers()
+            const friendships = await friendshipDatabase.getAllFriendships()
 
             if(friendships.length < 1){
                 throw new EmptyListError()
             }
 
-            return await friendshipDatabase.getAllUsers()
+            return await friendshipDatabase.getAllFriendships()
         }catch(err: any){
             throw new CustomError(err.statusCode, err.message)
         }
@@ -35,6 +35,8 @@ class FriendshipBusiness {
                 throw new MissingUserId()
             } if(!input.friendId){
                 throw new MissingFriendId()
+            } if(input.userId === input.friendId){
+                throw new CustomError(409, "Unable to add yourself.")
             }
 
             const allUsers = await usersDatabase.getAllUsers()
@@ -55,10 +57,10 @@ class FriendshipBusiness {
                 input.friendId
             )
 
-            const allFriendships = await friendshipDatabase.getAllUsers()
+            const allFriendships = await friendshipDatabase.getAllFriendships()
             
             for(let friend of allFriendships){
-                if(friend.friend_id === input.friendId){
+                if(input.userId === friend.user_id && friend.friend_id === input.friendId){
                     throw new CustomError(409, "Friend already added.")
                 }
             }

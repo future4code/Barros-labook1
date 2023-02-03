@@ -9,7 +9,10 @@ import User from "../model/User"
 import { UserIdDTO, UserSignUpInputDTO } from "../model/UsersDTO"
 import idGenerator from "../services/idGenerator"
 import MissingUserId from "../error/UsersErrors/MissingUserId"
-import PostsDatabase from "../data/PostsDatabase"
+import UserExisting from "../error/UsersErrors/UserExisting"
+import InvalidPassword from "../error/UsersErrors/InvalidPassword"
+import BaseDatabase from "../data/BaseDatabase"
+
 
 const usersDatabase = new UsersDatabase()
 const id = new idGenerator()
@@ -24,20 +27,25 @@ class UsersBusiness {
 
             if(users.length < 1){
                 throw new EmptyListError()
-            }
+            } 
 
             for(let user of users){
-                const posts = await PostsDatabase.connection("labook_posts").select("*").whereLike("author_id", user.id)
+                const posts = await BaseDatabase.connection("labook_posts").select("*").whereLike("author_id", user.id)
+                const friendships = await BaseDatabase.connection("labook_friendships")
+                .select("*")
+                .whereLike("labook_friendships.user_id", user.id)
+                .orWhereLike("labook_friendships.friend_id", user.id)        
 
-                let userWithPosts = {
+                user = {
                     user, 
-                    posts
+                    posts,
+                    friendships
                 }
 
-                allUsers.push(userWithPosts)
+                allUsers.push(user)
             }
 
-            return await usersDatabase.getAllUsers()
+            return allUsers
         }catch(err: any){
             throw new CustomError(err.statusCode, err.message)            
         }
@@ -53,6 +61,15 @@ class UsersBusiness {
                 throw new MissingEmail()
             } if(!input.password){
                 throw new MissingPassword()
+            } if(input.password.length < 8){
+                throw new InvalidPassword()
+            }
+
+            const users = await usersDatabase.getAllUsers()
+            const userExisting = users.filter(user => user.email === input.email)
+
+            if(userExisting.length > 0){
+                throw new UserExisting
             }
 
             const newUser = new User(
@@ -84,7 +101,7 @@ class UsersBusiness {
             const user = await usersDatabase.getUser(input)
             
             for(let userItem of user){
-                const posts = await PostsDatabase.connection("labook_posts").select("*").whereLike("author_id", userItem.id)
+                const posts = await BaseDatabase.connection("labook_posts").select("*").whereLike("author_id", userItem.id)
 
                 userObject = {
                     user, 
