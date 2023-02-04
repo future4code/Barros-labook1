@@ -8,3 +8,5 @@ const friendshipController = new FriendshipController()
 friendshipRouter.get("/", friendshipController.getAllFriendships)
 
 friendshipRouter.post("/:user_id", friendshipController.createFriendship)
+
+friendshipRouter.delete("/:user_id", friendshipController.undoFriendship)

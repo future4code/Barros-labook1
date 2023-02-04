@@ -1,4 +1,4 @@
-export interface FriendshipCreateInputDTO {
+export interface FriendshipInputDTO {
     userId: string,
     friendId: string
 }

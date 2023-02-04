@@ -1,7 +1,6 @@
 import { Request, Response } from "express"
 import FriendshipBusiness from "../business/FriendshipBusiness"
-import Friendship from "../model/Friendship"
-import { FriendshipCreateInputDTO } from "../model/FriendshipDTO"
+import { FriendshipInputDTO } from "../model/FriendshipDTO"
 
 const friendshipBusiness = new FriendshipBusiness()
 
@@ -19,7 +18,7 @@ class FriendshipController {
 
     createFriendship = async (req: Request, res: Response): Promise<void> => {
         try{
-            const input: FriendshipCreateInputDTO = {
+            const input: FriendshipInputDTO = {
                 userId: req.params.user_id,
                 friendId: req.body.friendId
             }
@@ -30,6 +29,21 @@ class FriendshipController {
         }catch(err: any){
             res.status(err.statusCode || 400).send(err.message || err.sqlMessage)
         }
+    }
+
+    undoFriendship =async (req: Request, res: Response): Promise<void> => {
+        try{
+            const input: FriendshipInputDTO = {
+                userId: req.params.user_id,
+                friendId: req.body.friendId
+            }
+
+            await friendshipBusiness.undoFriendship(input)
+
+            res.status(201).send("Broken friendship.")
+        }catch(err: any){
+            res.status(err.statusCode || 400).send(err.message || err.sqlMessage)
+        } 
     }
 }
 

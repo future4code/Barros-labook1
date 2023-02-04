@@ -1,5 +1,5 @@
 import { CustomError } from "../error/CustomError"
-import { FriendshipCreateInputDTO } from "../model/FriendshipDTO"
+import { FriendshipInputDTO } from "../model/FriendshipDTO"
 import MissingUserId from "../error/UsersErrors/MissingUserId"
 import MissingFriendId from "../error/FriendshipErrors/MissingFriendId"
 import UserNotExisting from "../error/UsersErrors/UserNotExisting"
@@ -29,7 +29,7 @@ class FriendshipBusiness {
         }
     }
 
-    createFriendship = async (input: FriendshipCreateInputDTO): Promise<void> => {
+    createFriendship = async (input: FriendshipInputDTO): Promise<void> => {
         try{
             if(input.userId === ":user_id"){
                 throw new MissingUserId()
@@ -60,12 +60,47 @@ class FriendshipBusiness {
             const allFriendships = await friendshipDatabase.getAllFriendships()
             
             for(let friend of allFriendships){
-                if(input.userId === friend.user_id && friend.friend_id === input.friendId){
+                if((input.userId === friend.user_id && friend.friend_id === input.friendId) || (input.userId === friend.friend_id && friend.friend_id === input.userId)){
                     throw new CustomError(409, "Friend already added.")
                 }
             }
 
             await friendshipDatabase.createFriendship(newFriendship)
+           
+        }catch(err: any){
+            throw new CustomError(err.statusCode, err.message)  
+        }
+    }
+
+    undoFriendship = async (input: FriendshipInputDTO): Promise<void> => {
+        try{
+            if(input.userId === ":user_id"){
+                throw new MissingUserId()
+            } if(!input.friendId){
+                throw new MissingFriendId()
+            }
+
+            const allUsers = await usersDatabase.getAllUsers()
+
+            const userExisting = allUsers.filter(user => user.id === input.userId)
+            if(userExisting.length < 1){
+                throw new UserNotExisting()
+            }  
+            
+            const userFriendExisting = allUsers.filter(userFriend => userFriend.id === input.friendId)
+            if(userFriendExisting.length < 1){
+                throw new FriendNotExisting()
+            }
+
+            const allFriendships = await friendshipDatabase.getAllFriendships()
+
+            for(let friendship of allFriendships){
+                if((friendship.user_id !== input.userId && friendship.user_id !== input.friendId) || (friendship.friend_id !== input.userId && friendship.friend_id !== input.friendId)){
+                    throw new CustomError(404, "Non-existent friendship.")
+                }
+            }         
+
+            await friendshipDatabase.undoFriendship(input)
            
         }catch(err: any){
             throw new CustomError(err.statusCode, err.message)  
