@@ -60,7 +60,7 @@ class FriendshipBusiness {
             const allFriendships = await friendshipDatabase.getAllFriendships()
             
             for(let friend of allFriendships){
-                if((input.userId === friend.user_id && friend.friend_id === input.friendId) || (input.userId === friend.friend_id && friend.friend_id === input.userId)){
+                if(input.userId === friend.user_id && friend.friend_id === input.friendId){
                     throw new CustomError(409, "Friend already added.")
                 }
             }
@@ -95,10 +95,10 @@ class FriendshipBusiness {
             const allFriendships = await friendshipDatabase.getAllFriendships()
 
             for(let friendship of allFriendships){
-                if((friendship.user_id !== input.userId && friendship.user_id !== input.friendId) || (friendship.friend_id !== input.userId && friendship.friend_id !== input.friendId)){
+                if(friendship.user_id !== input.userId && friendship.user_id !== input.friendId && friendship.friend_id !== input.userId && friendship.friend_id !== input.friendId ){
                     throw new CustomError(404, "Non-existent friendship.")
                 }
-            }         
+            }
 
             await friendshipDatabase.undoFriendship(input)
            
