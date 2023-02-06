@@ -21,7 +21,7 @@ class UsersController {
                 fullName: req.body.fullName,
                 email: req.body.email,
                 password: req.body.password
-            }
+            } of 
 
             await usersBusiness.signup(input)
 

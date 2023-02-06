@@ -57,6 +57,12 @@ class FriendshipBusiness {
                 input.friendId
             )
 
+            const secondNewFriendship = new Friendship(
+                id.idGenerator(),
+                input.friendId,
+                input.userId
+            )
+
             const allFriendships = await friendshipDatabase.getAllFriendships()
             
             for(let friend of allFriendships){
@@ -65,7 +71,7 @@ class FriendshipBusiness {
                 }
             }
 
-            await friendshipDatabase.createFriendship(newFriendship)
+            await friendshipDatabase.createFriendship(newFriendship, secondNewFriendship)
            
         }catch(err: any){
             throw new CustomError(err.statusCode, err.message)  
@@ -94,12 +100,16 @@ class FriendshipBusiness {
 
             const allFriendships = await friendshipDatabase.getAllFriendships()
 
-            for(let friendship of allFriendships){
-                if(friendship.user_id !== input.userId && friendship.user_id !== input.friendId && friendship.friend_id !== input.userId && friendship.friend_id !== input.friendId ){
-                    throw new CustomError(404, "Non-existent friendship.")
-                }
-            }
+            const friendshipExisting = allFriendships.filter(friendship => {
+                if(friendship.user_id === input.userId && friendship.friend_id === input.friendId){
+                    return friendship
+                }           
+            })
 
+            if(friendshipExisting.length < 1){
+                throw new CustomError(404, "Non-existent friendship.")
+            }
+            
             await friendshipDatabase.undoFriendship(input)
            
         }catch(err: any){

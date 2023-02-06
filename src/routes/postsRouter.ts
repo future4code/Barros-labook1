@@ -9,4 +9,6 @@ postsRouter.get("/", postsController.getAllPosts)
 
 postsRouter.get("/post/:id", postsController.getPost)
 
+postsRouter.get("/feed/:id", postsController.getUserFeed)
+
 postsRouter.post("/", postsController.createPost)

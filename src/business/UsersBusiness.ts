@@ -27,14 +27,13 @@ class UsersBusiness {
 
             if(users.length < 1){
                 throw new EmptyListError()
-            } 
+            }
 
             for(let user of users){
                 const posts = await BaseDatabase.connection("labook_posts").select("*").whereLike("author_id", user.id)
                 const friendships = await BaseDatabase.connection("labook_friendships")
                 .select("*")
                 .whereLike("labook_friendships.user_id", user.id)
-                .orWhereLike("labook_friendships.friend_id", user.id)
 
                 user = {
                     user, 
@@ -105,7 +104,6 @@ class UsersBusiness {
                 const friendships = await BaseDatabase.connection("labook_friendships")
                 .select("*")
                 .whereLike("labook_friendships.user_id", userItem.id)
-                .orWhereLike("labook_friendships.friend_id", userItem.id)
 
                 userObject = {
                     user, 

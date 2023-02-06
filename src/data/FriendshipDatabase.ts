@@ -9,14 +9,14 @@ class FriendshipDatabase extends BaseDatabase {
         return await FriendshipDatabase.connection(this.TABLE_NAME).select("*")        
     }
 
-    createFriendship = async (friendship: Friendship) => {
-        await FriendshipDatabase.connection(this.TABLE_NAME).insert(friendship)
+    createFriendship = async (newFriendship: Friendship, secondNewFriendship: Friendship) => {
+        await FriendshipDatabase.connection(this.TABLE_NAME).insert([newFriendship, secondNewFriendship])
     }
 
     undoFriendship =async (input: FriendshipInputDTO) => {
         await FriendshipDatabase.connection(this.TABLE_NAME).whereLike("labook_friendships.user_id", input.userId)
         .andWhereLike("labook_friendships.friend_id", input.friendId)
-        .orWhereLike("labook_friendships.friend_id", input.userId)
+        .orWhereLike("labook_friendships.user_id", input.friendId)
         .andWhereLike("labook_friendships.friend_id", input.userId)
         .del()
     }
