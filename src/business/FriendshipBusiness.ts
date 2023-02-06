@@ -9,6 +9,7 @@ import FriendshipDatabase from "../data/FriendshipDatabase"
 import Friendship from "../model/Friendship"
 import idGenerator from "../services/idGenerator"
 import EmptyListError from "../error/EmptyListError"
+import { UserIdDTO } from "../model/UsersDTO"
 
 const usersDatabase = new UsersDatabase()
 const friendshipDatabase = new FriendshipDatabase()
@@ -29,6 +30,24 @@ class FriendshipBusiness {
         }
     }
 
+    getUserFriendships = async (input: UserIdDTO): Promise<Friendship[]> => {
+        try{
+            if(input.id === ":id"){
+                throw new MissingUserId()
+            }
+
+            const friendships = await friendshipDatabase.getAllFriendships()
+
+            if(friendships.length < 1){
+                throw new EmptyListError()
+            }
+
+            return await friendshipDatabase.getUserFriendships(input)
+        }catch(err: any){
+            throw new CustomError(err.statusCode, err.message)
+        }
+    }
+
     createFriendship = async (input: FriendshipInputDTO): Promise<void> => {
         try{
             if(input.userId === ":user_id"){
@@ -39,7 +58,7 @@ class FriendshipBusiness {
                 throw new CustomError(409, "Unable to add yourself.")
             }
 
-            const allUsers = await usersDatabase.getAllUsers()
+            const allUsers = await usersDatabase.getUsers()
 
             const userExisting = allUsers.filter(user => user.id === input.userId)
             if(userExisting.length < 1){
@@ -86,7 +105,7 @@ class FriendshipBusiness {
                 throw new MissingFriendId()
             }
 
-            const allUsers = await usersDatabase.getAllUsers()
+            const allUsers = await usersDatabase.getUsers()
 
             const userExisting = allUsers.filter(user => user.id === input.userId)
             if(userExisting.length < 1){

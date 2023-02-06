@@ -1,6 +1,10 @@
 import Post from "../model/Post";
 import { PostIdDTO } from "../model/PostsDTO";
+import { UserIdDTO } from "../model/UsersDTO";
 import BaseDatabase from "./BaseDatabase";
+import FriendshipDatabase from "./FriendshipDatabase";
+
+const friendshipsDatabase = new FriendshipDatabase()
 
 class PostsDatabase extends BaseDatabase {
     TABLE_NAME = "labook_posts"
@@ -17,7 +21,15 @@ class PostsDatabase extends BaseDatabase {
         return await PostsDatabase.connection(this.TABLE_NAME).select("*").whereLike("id", input.id)
     }
 
-    getUserFeed = async (ids: string[]) => { 
+    getUserFeed = async (input: UserIdDTO) => {
+
+        let ids: string[] = []
+
+        const userFriendships = await friendshipsDatabase.getUserFriendships(input)
+
+        userFriendships.forEach((user)=>{
+            ids.push(user.friend_id)
+        })
 
         let friendsPosts: any[] = []
 

@@ -4,7 +4,11 @@ GET http://localhost:3306/users
 Content-Type: application/json
 
 ###
-GET http://localhost:3306/users/user/8199b2cb-8090-47bd-808b-0903162e2187
+GET http://localhost:3306/users/all
+Content-Type: application/json
+
+###
+GET http://localhost:3306/users/user/97eb48b8-a657-4423-927e-8b4c9fd88376
 Content-Type: application/json
 
 ###
@@ -27,7 +31,7 @@ GET http://localhost:3306/posts/post/df8a12ef-c36f-44f3-ad70-3f45c777936a
 Content-Type: application/json
 
 ###
-GET http://localhost:3306/posts/feed/75a9b1ca-223a-4cc0-8de6-8e47991c75d4
+GET http://localhost:3306/posts/feed/97eb48b8-a657-4423-927e-8b4c9fd88376
 Content-Type: application/json
 
 ###
@@ -55,7 +59,7 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:3306/friendships/75a9b1ca-223a-4cc0-8de6-8e47991c75d4
+DELETE http://localhost:3306/friendships/97eb48b8-a657-4423-927e-8b4c9fd88376
 Content-Type: application/json
 
 {

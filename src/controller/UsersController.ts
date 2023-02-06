@@ -5,9 +5,20 @@ import { UserIdDTO, UserSignUpInputDTO } from "../model/UsersDTO"
 const usersBusiness = new UsersBusiness()
 
 class UsersController {
-    getAllUsers = async (req: Request, res: Response): Promise<void> => {
+
+    getUsers =async (req: Request, res: Response): Promise<void> => {
         try{
-            const allUsers = await usersBusiness.getAllUsers()
+            const users = await usersBusiness.getUsers()
+
+            res.status(200).send(users)
+        }catch(err: any){
+            res.status(err.statusCode || 400).send(err.message || err.sqlMessage)
+        }
+    }
+
+    getUsersAllInfos = async (req: Request, res: Response): Promise<void> => {
+        try{
+            const allUsers = await usersBusiness.getUsersAllInfos()
 
             res.status(200).send(allUsers)
         }catch(err: any){
@@ -21,7 +32,7 @@ class UsersController {
                 fullName: req.body.fullName,
                 email: req.body.email,
                 password: req.body.password
-            } of 
+            }
 
             await usersBusiness.signup(input)
 

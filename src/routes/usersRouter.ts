@@ -5,7 +5,9 @@ export const usersRouter = express.Router()
 
 const usersController = new UsersController()
 
-usersRouter.get("/", usersController.getAllUsers)
+usersRouter.get("/", usersController.getUsers)
+
+usersRouter.get("/all", usersController.getUsersAllInfos)
 
 usersRouter.get("/user/:id", usersController.getUser)
 

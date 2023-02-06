@@ -14,12 +14,10 @@ import idGenerator from "../services/idGenerator"
 import MissingPostId from "../error/PostsErrors/MissingPostId"
 import PostNotExisting from "../error/PostsErrors/PostNotExisting"
 import { UserIdDTO } from "../model/UsersDTO"
-import BaseDatabase from "../data/BaseDatabase"
 
 const postsDatabase = new PostsDatabase()
 const usersDatabase = new UsersDatabase()
 const id = new idGenerator()
-let ids: string[] = []
 
 class PostsBusiness {
     getAllPosts = async (): Promise<Post[]> => {
@@ -56,7 +54,7 @@ class PostsBusiness {
                 throw new InvalidType()
             }
 
-            const allUsers = await usersDatabase.getAllUsers()
+            const allUsers = await usersDatabase.getUsers()
             const userExisting = allUsers.filter(user => user.id === input.authorId)
 
             if(userExisting.length < 1){
@@ -105,22 +103,14 @@ class PostsBusiness {
                 throw new MissingUserId()
             }
 
-            const allUsers = await usersDatabase.getAllUsers()
+            const allUsers = await usersDatabase.getUsers()
             const userExisting = allUsers.filter(user => user.id === input.id)
 
             if(userExisting.length < 1){
                 throw new UserNotExisting()
             }
 
-            const userFriendships = await BaseDatabase.connection("labook_friendships")
-            .select("*")
-            .whereLike("labook_friendships.user_id", input.id)
-
-            userFriendships.forEach((user)=>{
-                ids.push(user.friend_id)
-            })
-
-            return await postsDatabase.getUserFeed(ids)
+            return await postsDatabase.getUserFeed(input)
             
         }catch(err: any){
             throw new CustomError(err.statusCode, err.message) 

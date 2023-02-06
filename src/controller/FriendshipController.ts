@@ -1,6 +1,7 @@
 import { Request, Response } from "express"
 import FriendshipBusiness from "../business/FriendshipBusiness"
 import { FriendshipInputDTO } from "../model/FriendshipDTO"
+import { UserIdDTO } from "../model/UsersDTO"
 
 const friendshipBusiness = new FriendshipBusiness()
 
@@ -11,6 +12,20 @@ class FriendshipController {
             const allFriendships = await friendshipBusiness.getAllFriendships()
 
             res.status(200).send(allFriendships)
+        }catch(err: any){
+            res.status(err.statusCode || 400).send(err.message || err.sqlMessage)
+        }
+    }
+
+    getUserFriendships = async (req: Request, res: Response): Promise<void> => {
+        try{
+            const input: UserIdDTO = {
+                id: req.params.id
+            }
+
+            const userFriendships = await friendshipBusiness.getUserFriendships(input)
+
+            res.status(200).send(userFriendships)
         }catch(err: any){
             res.status(err.statusCode || 400).send(err.message || err.sqlMessage)
         }
