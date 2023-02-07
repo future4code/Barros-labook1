@@ -27,6 +27,10 @@ GET http://localhost:3306/posts
 Content-Type: application/json
 
 ###
+GET http://localhost:3306/posts/type?type=normal
+Content-Type: application/json
+
+###
 GET http://localhost:3306/posts/post/df8a12ef-c36f-44f3-ad70-3f45c777936a
 Content-Type: application/json
 
@@ -40,9 +44,9 @@ Content-Type: application/json
 
 {
     "photo": "https://i.pinimg.com/originals/e4/34/2a/e4342a4e0e968344b75cf50cf1936c09.jpg",
-    "description": "THTJTHJ",
-    "type": "NORMAL",
-    "authorId": "8199b2cb-8090-47bd-808b-0903162e2187"
+    "description": "dd",
+    "type": "normal",
+    "authorId": "97eb48b8-a657-4423-927e-8b4c9fd88376"
 }
 
 // Friendships endpoints
@@ -51,11 +55,11 @@ GET http://localhost:3306/friendships
 Content-Type: application/json
 
 ###
-POST http://localhost:3306/friendships/97eb48b8-a657-4423-927e-8b4c9fd88376
+POST http://localhost:3306/friendships/8199b2cb-8090-47bd-808b-0903162e2187
 Content-Type: application/json
 
 {
-    "friendId": "8199b2cb-8090-47bd-808b-0903162e2187"
+    "friendId": "97eb48b8-a657-4423-927e-8b4c9fd88376"
 }
 
 ###

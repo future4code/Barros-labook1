@@ -17,6 +17,18 @@ class PostsController {
         }
     }
 
+    getPostsByType = async (req: Request, res: Response): Promise<void> => {
+        try{
+            const type: string = req.query.type as string
+
+            const allPosts = await postsBusiness.getPostsByType(type)
+
+            res.status(200).send(allPosts)
+        }catch(err: any){
+            res.status(err.statusCode || 400).send(err.message || err.sqlMessage)
+        }
+    }
+
     createPost = async (req: Request, res: Response): Promise<void> => {
         try{
             const input: PostCreateInputDTO = {

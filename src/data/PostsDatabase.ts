@@ -9,8 +9,12 @@ const friendshipsDatabase = new FriendshipDatabase()
 class PostsDatabase extends BaseDatabase {
     TABLE_NAME = "labook_posts"
 
-    getAllPosts = async () => {
+    getAllPosts = async () => {        
         return await PostsDatabase.connection(this.TABLE_NAME).select("*")
+    }
+
+    getPostsByType = async (type: string) => {        
+        return await PostsDatabase.connection(this.TABLE_NAME).select("*").where("type", type.toLowerCase()).orderBy("created_at", "desc")
     }
 
     createPost = async (post: Post) => {

@@ -18,6 +18,8 @@ import { UserIdDTO } from "../model/UsersDTO"
 const postsDatabase = new PostsDatabase()
 const usersDatabase = new UsersDatabase()
 const id = new idGenerator()
+let normal = "normal"
+let event = "event"
 
 class PostsBusiness {
     getAllPosts = async (): Promise<Post[]> => {
@@ -34,10 +36,27 @@ class PostsBusiness {
         }
     }
 
-    createPost = async (input: PostCreateInputDTO): Promise<void> => {
+    getPostsByType = async (type: string): Promise<Post[]> => {
+        try{        
+            if(!type){
+                throw new MissingType()
+            } if(type.toUpperCase() !== normal.toUpperCase() && type.toUpperCase() !== event.toUpperCase()){
+                throw new InvalidType()
+            }           
 
-        let normal = "normal"
-        let event = "event"
+            const allPosts = await postsDatabase.getAllPosts()
+
+            if(allPosts.length < 1){
+                throw new EmptyListError()
+            }
+
+            return await postsDatabase.getPostsByType(type)
+        }catch(err: any){
+            throw new CustomError(err.statusCode, err.message)
+        }
+    }
+
+    createPost = async (input: PostCreateInputDTO): Promise<void> => {
 
         try{
             if(!input.photo && !input.description && !input.type && !input.authorId){
