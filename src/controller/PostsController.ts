@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
 import PostsBusiness from "../business/PostsBusiness"
-import { PostCreateInputDTO, PostIdDTO } from "../model/PostsDTO"
+import { LikeOrDislikePostInputDTO, PostCreateInputDTO, PostIdDTO, PostIdLikeDTO } from "../model/PostsDTO"
 import { UserIdDTO } from "../model/UsersDTO"
 
 const postsBusiness = new PostsBusiness()
@@ -21,9 +21,9 @@ class PostsController {
         try{
             const type: string = req.query.type as string
 
-            const allPosts = await postsBusiness.getPostsByType(type)
+            const posts = await postsBusiness.getPostsByType(type)
 
-            res.status(200).send(allPosts)
+            res.status(200).send(posts)
         }catch(err: any){
             res.status(err.statusCode || 400).send(err.message || err.sqlMessage)
         }
@@ -73,6 +73,51 @@ class PostsController {
             res.status(err.statusCode || 400).send(err.message || err.sqlMessage)
         }
     }
+
+    getPostLikes = async (req: Request, res: Response): Promise<void> => {
+        try{
+            const input: PostIdLikeDTO = {
+                postId: req.params.post_id
+            }
+
+            const postLikes = await postsBusiness.getPostLikes(input)
+
+            res.status(200).send(postLikes)
+        }catch(err: any){
+            res.status(err.statusCode || 400).send(err.message || err.sqlMessage)
+        }
+    }
+
+    likePost = async (req: Request, res: Response): Promise<void> => {
+        try{
+            const input: LikeOrDislikePostInputDTO = {
+                userId: req.params.user_id,
+                postId: req.body.postId
+            }
+
+            await postsBusiness.likePost(input)
+
+            res.status(200).send("Liked post.")
+        }catch(err: any){
+            res.status(err.statusCode || 400).send(err.message || err.sqlMessage)
+        }
+    }
+
+    dislikePost = async (req: Request, res: Response): Promise<void> => {
+        try{
+            const input: LikeOrDislikePostInputDTO = {
+                userId: req.params.user_id,
+                postId: req.body.postId
+            }
+
+            await postsBusiness.dislikePost(input)
+
+            res.status(200).send("Disliked post.")
+        }catch(err: any){
+            res.status(err.statusCode || 400).send(err.message || err.sqlMessage)
+        }
+    }
+
 }
 
 export default PostsController

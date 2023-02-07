@@ -13,3 +13,12 @@ export interface PostCreateInputDTO {
 export interface PostIdDTO {
     id: string
 }
+
+export interface LikeOrDislikePostInputDTO {
+    userId: string, 
+    postId: string
+}
+
+export interface PostIdLikeDTO {
+    postId: string
+}

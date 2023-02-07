@@ -1,4 +1,4 @@
-// Users endpoints
+// -------- Users endpoints --------
 ###
 GET http://localhost:3306/users
 Content-Type: application/json
@@ -21,9 +21,17 @@ Content-Type: application/json
     "password": "12345678"
 }
 
-// Posts endpoints
+
+
+
+
+// -------- Posts endpoints --------
 ###
 GET http://localhost:3306/posts
+Content-Type: application/json
+
+###
+GET http://localhost:3306/posts/likes/df8a12ef-c36f-44f3-ad70-3f45c777936a
 Content-Type: application/json
 
 ###
@@ -49,7 +57,25 @@ Content-Type: application/json
     "authorId": "97eb48b8-a657-4423-927e-8b4c9fd88376"
 }
 
-// Friendships endpoints
+###
+POST http://localhost:3306/posts/like/75a9b1ca-223a-4cc0-8de6-8e47991c75d4
+Content-Type: application/json
+
+{
+    "postId": "df8a12ef-c36f-44f3-ad70-3f45c777936a"
+}
+
+###
+PATCH http://localhost:3306/posts/dislike/75a9b1ca-223a-4cc0-8de6-8e47991c75d4
+Content-Type: application/json
+
+{
+    "postId": "df8a12ef-c36f-44f3-ad70-3f45c777936a"
+}
+
+
+
+// -------- Friendships endpoints --------
 ###
 GET http://localhost:3306/friendships
 Content-Type: application/json
