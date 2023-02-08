@@ -62,7 +62,7 @@ class PostsDatabase extends BaseDatabase {
     }
 
     dislikePost = async (input: LikeOrDislikePostInputDTO) => {        
-        return await PostsDatabase.connection("labook_posts_likes").whereLike("user_id", input.userId).andWhereLike("post_id", input.postId).update("liked", "no")
+        return await PostsDatabase.connection("labook_posts_likes").whereLike("user_id", input.userId).andWhereLike("post_id", input.postId).del()
     }
 
     commentPost = async (newComment: Comment) => {

@@ -44,14 +44,6 @@ Content-Type: application/json
 GET http://localhost:3306/posts/feed/97eb48b8-a657-4423-927e-8b4c9fd88376
 Content-Type: application/json
 
-### Get Post Likes
-GET http://localhost:3306/posts/likes/2dc0518e-1d0d-49df-af9c-4624d4cd56e9
-Content-Type: application/json
-
-### Get Post Comments
-GET http://localhost:3306/posts/comments/2dc0518e-1d0d-49df-af9c-4624d4cd56e9
-Content-Type: application/json
-
 ### Create Post
 POST http://localhost:3306/posts
 Content-Type: application/json
@@ -63,13 +55,15 @@ Content-Type: application/json
     "authorId": "97eb48b8-a657-4423-927e-8b4c9fd88376"
 }
 
-### Like Post
-POST http://localhost:3306/posts/like/8199b2cb-8090-47bd-808b-0903162e2187
-Content-Type: application/json
 
-{
-    "postId": "2dc0518e-1d0d-49df-af9c-4624d4cd56e9"
-}
+
+
+
+// -------- Posts comments and likes endpoints --------
+
+### Get Post Comments
+GET http://localhost:3306/posts/comments/2dc0518e-1d0d-49df-af9c-4624d4cd56e9
+Content-Type: application/json
 
 ### Comment Post
 POST http://localhost:3306/posts/comment/8199b2cb-8090-47bd-808b-0903162e2187
@@ -80,8 +74,20 @@ Content-Type: application/json
     "comment": "Finesse"
 }
 
+### Get Post Likes
+GET http://localhost:3306/posts/likes/2dc0518e-1d0d-49df-af9c-4624d4cd56e9
+Content-Type: application/json
+
+### Like Post
+POST http://localhost:3306/posts/like/8199b2cb-8090-47bd-808b-0903162e2187
+Content-Type: application/json
+
+{
+    "postId": "2dc0518e-1d0d-49df-af9c-4624d4cd56e9"
+}
+
 ### Dislike Post
-PATCH http://localhost:3306/posts/dislike/8199b2cb-8090-47bd-808b-0903162e2187
+DELETE http://localhost:3306/posts/dislike/8199b2cb-8090-47bd-808b-0903162e2187
 Content-Type: application/json
 
 {

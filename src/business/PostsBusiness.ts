@@ -185,7 +185,7 @@ class PostsBusiness {
             const postLikes = await postsDatabase.getPostLikes(input)
 
             const postAlreadyLiked = postLikes.filter(post => {
-                if(post.liked === "yes" && post.user_id === input.userId && post.post_id === input.postId){
+                if(post.user_id === input.userId && post.post_id === input.postId){
                     return post
                 }
             })
@@ -194,32 +194,14 @@ class PostsBusiness {
                 throw new CustomError(409, "Can't like a post twice.")
             }
 
-            const postDisliked = postLikes.filter(post => {
-                if(post.liked === "no" && post.user_id === input.userId && post.post_id === input.postId){
-                    return post
-                }
-            })
-
-            if(postDisliked.length > 0){
-                await PostsDatabase.connection("labook_posts_likes").whereLike("user_id", input.userId).andWhereLike("post_id", input.postId).update("liked", "yes")
-            }
-
-            const postNeverLiked = postLikes.filter(post => {
-                if(post.user_id !== input.userId && post.post_id !== input.postId){
-                    return post
-                }
-            })
-
             const newLike = new Like(
                 id.idGenerator(), 
                 input.userId,
                 input.postId,
-                "yes"
+                "true"
             )
-
-            if(postNeverLiked.length < 1 && postAlreadyLiked.length < 1 && postDisliked.length < 1){
-                return await postsDatabase.likePost(newLike)
-            }
+    
+            return await postsDatabase.likePost(newLike)
             
         }catch(err: any){
             throw new CustomError(err.statusCode, err.message) 
@@ -250,27 +232,17 @@ class PostsBusiness {
 
             const postLikes = await postsDatabase.getPostLikes(input)
 
-            const postAlreadyDisliked = postLikes.filter(post => {
-                if(post.liked === "no" && post.user_id === input.userId && post.post_id === input.postId){
+            const postLikeExisting = postLikes.filter(post => {
+                if(post.user_id === input.userId && post.post_id === input.postId){
                     return post
                 }
             })
 
-            if(postAlreadyDisliked.length > 0){
-                throw new CustomError(409, "You already disliked this post.")
+            if(postLikeExisting.length < 1){
+                throw new CustomError(409, "This post is not liked by you.")
             }
 
-            const postLiked = postLikes.filter(post => {
-                if(post.liked === "yes" && post.user_id === input.userId && post.post_id === input.postId){
-                    return post
-                }
-            })
-
-            if(postLiked.length > 0){
-                return await postsDatabase.dislikePost(input)
-            } else {
-                throw new CustomError(409, "You never liked this post before.")
-            }
+            return await postsDatabase.dislikePost(input)
             
         }catch(err: any){
             throw new CustomError(err.statusCode, err.message) 

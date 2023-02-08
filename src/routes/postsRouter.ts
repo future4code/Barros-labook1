@@ -23,4 +23,4 @@ postsRouter.post("/like/:user_id", postsController.likePost)
 
 postsRouter.post("/comment/:user_id", postsController.commentPost)
 
-postsRouter.patch("/dislike/:user_id", postsController.dislikePost)
+postsRouter.delete("/dislike/:user_id", postsController.dislikePost)
