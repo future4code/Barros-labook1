@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
 import PostsBusiness from "../business/PostsBusiness"
-import { LikeOrDislikePostInputDTO, PostCreateInputDTO, PostIdDTO, PostIdLikeDTO } from "../model/PostsDTO"
+import { CommentPostInputDTO, LikeOrDislikePostInputDTO, PostCreateInputDTO, PostIdDTO, PostIdLikeDTO } from "../model/PostsDTO"
 import { UserIdDTO } from "../model/UsersDTO"
 
 const postsBusiness = new PostsBusiness()
@@ -113,6 +113,36 @@ class PostsController {
             await postsBusiness.dislikePost(input)
 
             res.status(200).send("Disliked post.")
+        }catch(err: any){
+            res.status(err.statusCode || 400).send(err.message || err.sqlMessage)
+        }
+    }
+
+    commentPost = async (req: Request, res: Response): Promise<void> => {
+        try{
+            const input: CommentPostInputDTO = {
+                userId: req.params.user_id,
+                postId: req.body.postId,
+                comment: req.body.comment
+            }
+
+            await postsBusiness.commentPost(input)
+
+            res.status(200).send("Commented post.")
+        }catch(err: any){
+            res.status(err.statusCode || 400).send(err.message || err.sqlMessage)
+        }
+    }
+
+    getPostComments = async (req: Request, res: Response): Promise<void> => {
+        try{
+            const input: PostIdDTO = {
+                id: req.params.post_id
+            }
+
+            const postComments = await postsBusiness.getPostComments(input)
+
+            res.status(200).send(postComments)
         }catch(err: any){
             res.status(err.statusCode || 400).send(err.message || err.sqlMessage)
         }

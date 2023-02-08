@@ -1,7 +1,7 @@
 import { CustomError } from "../error/CustomError"
 import PostsDatabase from "../data/PostsDatabase"
 import EmptyListError from "../error/EmptyListError"
-import { LikeOrDislikePostInputDTO, PostCreateInputDTO, PostIdDTO, PostIdLikeDTO } from "../model/PostsDTO"
+import { CommentPostInputDTO, LikeOrDislikePostInputDTO, PostCreateInputDTO, PostIdDTO, PostIdLikeDTO } from "../model/PostsDTO"
 import UsersDatabase from "../data/UsersDatabase"
 import MissingPhoto from "../error/PostsErrors/MissingPhoto"
 import MissingDescription from "../error/PostsErrors/MissingDescription"
@@ -15,6 +15,7 @@ import MissingPostId from "../error/PostsErrors/MissingPostId"
 import PostNotExisting from "../error/PostsErrors/PostNotExisting"
 import { UserIdDTO } from "../model/UsersDTO"
 import Like from "../model/Like"
+import Comment from "../model/Comment"
 
 const postsDatabase = new PostsDatabase()
 const usersDatabase = new UsersDatabase()
@@ -22,7 +23,9 @@ const id = new idGenerator()
 let normal = "normal"
 let event = "event"
 
+
 class PostsBusiness {
+  
     getAllPosts = async (): Promise<Post[]> => {
         try{
             const allPosts = await postsDatabase.getAllPosts()
@@ -191,12 +194,6 @@ class PostsBusiness {
                 throw new CustomError(409, "Can't like a post twice.")
             }
 
-            const postNeverLiked = postLikes.filter(post => {
-                if(post.user_id !== input.userId && post.post_id !== input.postId){
-                    return post
-                }
-            })
-
             const postDisliked = postLikes.filter(post => {
                 if(post.liked === "no" && post.user_id === input.userId && post.post_id === input.postId){
                     return post
@@ -205,17 +202,24 @@ class PostsBusiness {
 
             if(postDisliked.length > 0){
                 await PostsDatabase.connection("labook_posts_likes").whereLike("user_id", input.userId).andWhereLike("post_id", input.postId).update("liked", "yes")
-            }    
+            }
 
-            if(postNeverLiked.length > 0){
-                const newLike = new Like(
-                    id.idGenerator(), 
-                    input.userId,
-                    input.postId,
-                    "yes"
-                )
-                return await postsDatabase.likePost(input, newLike)
-            } 
+            const postNeverLiked = postLikes.filter(post => {
+                if(post.user_id !== input.userId && post.post_id !== input.postId){
+                    return post
+                }
+            })
+
+            const newLike = new Like(
+                id.idGenerator(), 
+                input.userId,
+                input.postId,
+                "yes"
+            )
+
+            if(postNeverLiked.length < 1 && postAlreadyLiked.length < 1 && postDisliked.length < 1){
+                return await postsDatabase.likePost(newLike)
+            }
             
         }catch(err: any){
             throw new CustomError(err.statusCode, err.message) 
@@ -267,6 +271,59 @@ class PostsBusiness {
             } else {
                 throw new CustomError(409, "You never liked this post before.")
             }
+            
+        }catch(err: any){
+            throw new CustomError(err.statusCode, err.message) 
+        }
+    }
+
+    commentPost = async (input: CommentPostInputDTO) => {
+        if(input.userId === ":user_id"){
+            throw new MissingUserId()
+        } if(!input.postId){
+            throw new MissingPostId()
+        } if(!input.comment){
+            throw new CustomError(422, "Missing comment.")
+        }
+
+        const allUsers = await usersDatabase.getUsers()
+        const userExisting = allUsers.filter(user => user.id === input.userId)
+
+        if(userExisting.length < 1){
+            throw new UserNotExisting()
+        } 
+
+        const allPosts = await postsDatabase.getAllPosts()
+        const postExisting = allPosts.filter(post => post.id === input.postId)
+
+        if(postExisting.length < 1){
+            throw new PostNotExisting()
+        }
+
+        const newComment = new Comment(
+            id.idGenerator(), 
+            input.userId,
+            input.postId,
+            input.comment
+        )
+
+        await postsDatabase.commentPost(newComment)
+    }
+
+    getPostComments = async (input: PostIdDTO) => {
+        try{
+            if(input.id === ":post_id"){
+                throw new MissingPostId
+            }
+
+            const allPosts = await postsDatabase.getAllPosts()
+            const postExisting = allPosts.filter(post => post.id === input.id)
+
+            if(postExisting.length < 1){
+                throw new PostNotExisting()
+            }
+
+            return await postsDatabase.getPostComments(input)
             
         }catch(err: any){
             throw new CustomError(err.statusCode, err.message) 

@@ -13,10 +13,14 @@ postsRouter.get("/post/:id", postsController.getPost)
 
 postsRouter.get("/likes/:post_id", postsController.getPostLikes)
 
+postsRouter.get("/comments/:post_id", postsController.getPostComments)
+
 postsRouter.get("/feed/:id", postsController.getUserFeed)
 
 postsRouter.post("/", postsController.createPost)
 
 postsRouter.post("/like/:user_id", postsController.likePost)
+
+postsRouter.post("/comment/:user_id", postsController.commentPost)
 
 postsRouter.patch("/dislike/:user_id", postsController.dislikePost)

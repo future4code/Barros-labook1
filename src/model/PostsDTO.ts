@@ -19,6 +19,12 @@ export interface LikeOrDislikePostInputDTO {
     postId: string
 }
 
+export interface CommentPostInputDTO {
+    userId: string,
+    postId: string,
+    comment: string, 
+}
+
 export interface PostIdLikeDTO {
     postId: string
 }

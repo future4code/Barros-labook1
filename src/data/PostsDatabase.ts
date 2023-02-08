@@ -1,3 +1,4 @@
+import Comment from "../model/Comment";
 import Like from "../model/Like";
 import Post from "../model/Post";
 import { LikeOrDislikePostInputDTO, PostIdDTO, PostIdLikeDTO } from "../model/PostsDTO";
@@ -56,13 +57,22 @@ class PostsDatabase extends BaseDatabase {
         return await PostsDatabase.connection("labook_posts_likes").select("*").where("post_id", input.postId)
     }
 
-    likePost = async (input: LikeOrDislikePostInputDTO, newLike: Like) => {
+    likePost = async (newLike: Like) => {
         await PostsDatabase.connection("labook_posts_likes").insert(newLike)
     }
 
     dislikePost = async (input: LikeOrDislikePostInputDTO) => {        
         return await PostsDatabase.connection("labook_posts_likes").whereLike("user_id", input.userId).andWhereLike("post_id", input.postId).update("liked", "no")
     }
+
+    commentPost = async (newComment: Comment) => {
+        await PostsDatabase.connection("labook_posts_comments").insert(newComment)
+    }
+
+    getPostComments = async (input: PostIdDTO) => {        
+        return await PostsDatabase.connection("labook_posts_comments").select("*").where("post_id", input.id)
+    }
+
 }
 
 export default PostsDatabase
