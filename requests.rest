@@ -1,19 +1,19 @@
 // -------- Users endpoints --------
 
 ### Get All Users
-GET http://localhost:3306/users
+GET https://labook-1ekd.onrender.com/users
 Content-Type: application/json
 
 ### Get All Users Infos
-GET http://localhost:3306/users/all
+GET https://labook-1ekd.onrender.com/users/all
 Content-Type: application/json
 
 ### Get User
-GET http://localhost:3306/users/user/97eb48b8-a657-4423-927e-8b4c9fd88376
+GET https://labook-1ekd.onrender.com/users/user/97eb48b8-a657-4423-927e-8b4c9fd88376
 Content-Type: application/json
 
 ### Create User
-POST http://localhost:3306/users
+POST https://labook-1ekd.onrender.com/users
 Content-Type: application/json
 
 {
@@ -29,23 +29,23 @@ Content-Type: application/json
 // -------- Posts endpoints --------
 
 ### Get All Posts
-GET http://localhost:3306/posts
+GET https://labook-1ekd.onrender.com/posts
 Content-Type: application/json
 
 ### Get Post By Type
-GET http://localhost:3306/posts/type?type=normal
+GET https://labook-1ekd.onrender.com/posts/type?type=normal
 Content-Type: application/json
 
 ### Get Post
-GET http://localhost:3306/posts/post/df8a12ef-c36f-44f3-ad70-3f45c777936a
+GET https://labook-1ekd.onrender.com/posts/post/df8a12ef-c36f-44f3-ad70-3f45c777936a
 Content-Type: application/json
 
 ### Get User Feed
-GET http://localhost:3306/posts/feed/97eb48b8-a657-4423-927e-8b4c9fd88376
+GET https://labook-1ekd.onrender.com/posts/feed/97eb48b8-a657-4423-927e-8b4c9fd88376
 Content-Type: application/json
 
 ### Create Post
-POST http://localhost:3306/posts
+POST https://labook-1ekd.onrender.com/posts
 Content-Type: application/json
 
 {
@@ -62,24 +62,24 @@ Content-Type: application/json
 // -------- Posts comments and likes endpoints --------
 
 ### Get Post Comments
-GET http://localhost:3306/posts/comments/2dc0518e-1d0d-49df-af9c-4624d4cd56e9
+GET https://labook-1ekd.onrender.com/posts/comments/2dc0518e-1d0d-49df-af9c-4624d4cd56e9
 Content-Type: application/json
 
 ### Comment Post
-POST http://localhost:3306/posts/comment/8199b2cb-8090-47bd-808b-0903162e2187
+POST https://labook-1ekd.onrender.com/posts/comment/8199b2cb-8090-47bd-808b-0903162e2187
 Content-Type: application/json
 
 {
     "postId": "2dc0518e-1d0d-49df-af9c-4624d4cd56e9",
-    "comment": "Finesse"
+    "comment": "Beautiful"
 }
 
 ### Get Post Likes
-GET http://localhost:3306/posts/likes/2dc0518e-1d0d-49df-af9c-4624d4cd56e9
+GET https://labook-1ekd.onrender.com/posts/likes/2dc0518e-1d0d-49df-af9c-4624d4cd56e9
 Content-Type: application/json
 
 ### Like Post
-POST http://localhost:3306/posts/like/8199b2cb-8090-47bd-808b-0903162e2187
+POST https://labook-1ekd.onrender.com/posts/like/8199b2cb-8090-47bd-808b-0903162e2187
 Content-Type: application/json
 
 {
@@ -87,7 +87,7 @@ Content-Type: application/json
 }
 
 ### Dislike Post
-DELETE http://localhost:3306/posts/dislike/8199b2cb-8090-47bd-808b-0903162e2187
+DELETE https://labook-1ekd.onrender.com/posts/dislike/8199b2cb-8090-47bd-808b-0903162e2187
 Content-Type: application/json
 
 {
@@ -101,11 +101,11 @@ Content-Type: application/json
 // -------- Friendships endpoints --------
 
 ### Get All Friendships
-GET http://localhost:3306/friendships
+GET https://labook-1ekd.onrender.com/friendships
 Content-Type: application/json
 
 ### Create Friendship
-POST http://localhost:3306/friendships/8199b2cb-8090-47bd-808b-0903162e2187
+POST https://labook-1ekd.onrender.com/friendships/8199b2cb-8090-47bd-808b-0903162e2187
 Content-Type: application/json
 
 {
@@ -113,7 +113,7 @@ Content-Type: application/json
 }
 
 ### Delete Friendship
-DELETE http://localhost:3306/friendships/97eb48b8-a657-4423-927e-8b4c9fd88376
+DELETE https://labook-1ekd.onrender.com/friendships/97eb48b8-a657-4423-927e-8b4c9fd88376
 Content-Type: application/json
 
 {
